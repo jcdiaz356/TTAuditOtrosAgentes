@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dataservicios.ttauditotrosagentes">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--
+         The following two permissions are not required to use
+
+         Google Maps Android API v2, but are recommended.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- PERMISO PARA HACER LLAMADA DESDE LA APP A UN PHONO -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+        android:name=".app.AppController"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_agente"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name=".LOGIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MapaRuta"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".MAPARUTAS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ListAgenteActivity"
+            android:label="Mis Agentes"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".LISTGENTE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".PanelAdmin"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".PANELADMIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".PuntoVenta"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".PUNTOVENTA" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".PuntosVenta"
+            android:label="PDVs del día"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".PUNTOSVENTA" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Encuesta"
+            android:label="PDVs del día"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".ENCUESTA" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".PresenciaProducto"
+            android:label="PDVs del día"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".PRESENCIAPRODUCTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".IngresarEspacios"
+            android:label="PDVs del día"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".INGRESARESPACIOS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DetallePdv"
+            android:label="Detalle PDV"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".DETALLEPDV" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- ACTIVIDADES SOLO PARA INTERBANK -->
+
+
+        <!-- ACTIVIDADES SOLO PARA INTRODUCCION -->
+        <activity
+            android:name=".interbank.introduccion"
+            android:label="Introducción"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".INTRODUCCION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.introduccionDos"
+            android:label="Introducción"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".INTRODUCCIONDOS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.introduccionTres"
+            android:label="Introducción"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".INTRODUCCIONTRES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- ACTIVIDADES SOLO PARA USO INTERBANK -->
+        <activity
+            android:name=".interbank.UsoIterbankAgente"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".USOIBK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.UsoInterbankAgenteSegundo"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".USOIBKSEGUNDO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.UsoInterbankAgenteTercero"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".USOIBKTERCERO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.UsoInterbankAgenteCuarto"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".USOIBKCUARTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.UsoInterbankAgenteQuinto"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".USOIBKQUINTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.UsoInterbankAgenteSexto"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".USOIBKSEXTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.UsoInterbankAgenteSiete"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".USOIBKSIETE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- ACTIVIDADES SOLO PARA  EvaluacionTransaccion INTERBANK -->
+        <activity
+            android:name=".interbank.EvaluacionTransaccion"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionUno"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONUNO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionDos"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONDOS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionTres"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONTRES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionCuatro"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONCUATRO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionCinco"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONCINCO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionSeis"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONSEIS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionSeisSiete"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONSEISSIETE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionSiete"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONSIETE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionOcho"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONOCHO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionNueve"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONNUEVE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionDiez"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONDIEZ" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTransaccionOnce"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRANSACCIONONCE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- ACTIVIDADES SOLO PARA  EvaluacionTrato INTERBANK -->
+
+        <activity
+            android:name=".interbank.EvaluacionTrato"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRATO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTratoDos"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRATODOS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.EvaluacionTratoTres"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".EVTRATOTRES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- ACTIVIDADES SOLO PARA  Información INTERBANK -->
+
+        <activity
+            android:name=".interbank.informacion"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".INFO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".interbank.InformacionComentario"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".INFOCUATRO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AndroidCustomGalleryActivity"
+            android:label="Galeria de Agente"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel" />
+
+
+        <activity android:name=".interbank.InformacionComisionesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel" />
+        <activity android:name=".interbank.InformacionReferirEjecutivoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel" />
+        <activity android:name=".interbank.InformacionOfertasActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel" />
+        <!-- ABOUT -->
+        <activity
+            android:name=".About"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeAdminPanel">
+            <intent-filter>
+                <action android:name=".ABOUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <uses-library android:name="com.google.android.maps" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <!-- Api Ke y producción -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBgbVIZGj8K-77ed-7FgSgNU7zlmAibv-Y" />
+
+        <service
+            android:name=".Services.UploadService"
+            android:label="@string/app_name" />
+        <service
+            android:name=".Services.MonitoGPSServices"
+            android:label="Alicorp GPS Location" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.dataservicios.ttauditotrosagentes.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+    </application>
+
+</manifest>
