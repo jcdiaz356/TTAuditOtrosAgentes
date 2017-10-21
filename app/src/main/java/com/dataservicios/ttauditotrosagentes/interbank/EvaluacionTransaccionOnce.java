@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,13 +24,19 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.dataservicios.ttauditotrosagentes.R;
 import com.dataservicios.ttauditotrosagentes.SQLite.DatabaseHelper;
 import com.dataservicios.ttauditotrosagentes.app.AppController;
+import com.dataservicios.ttauditotrosagentes.model.Audit;
 import com.dataservicios.ttauditotrosagentes.model.Encuesta;
+import com.dataservicios.ttauditotrosagentes.model.PollDetail;
+import com.dataservicios.ttauditotrosagentes.util.AuditUtil;
+import com.dataservicios.ttauditotrosagentes.util.GPSTracker;
 import com.dataservicios.ttauditotrosagentes.util.GlobalConstant;
 import com.dataservicios.ttauditotrosagentes.util.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -39,7 +46,7 @@ import java.util.HashMap;
 public class EvaluacionTransaccionOnce  extends Activity {
     private static final String LOG_TAG = EvaluacionTransaccionOnce.class.getSimpleName();
     private ProgressDialog pDialog;
-    private int idCompany, idPDV, idRuta, idAuditoria,idUser ;
+    private int idCompany, idPDV, idRuta, idAuditoria,idUser ,poll_id,store_id ,audit_id,road_id, user_id  ;
     private JSONObject params;
     private SessionManager session;
     private String email_user, name_user;
@@ -55,6 +62,10 @@ public class EvaluacionTransaccionOnce  extends Activity {
 
     // Database Helper
     private DatabaseHelper db;
+
+    private PollDetail pollDetail;
+    private Audit mAudit;
+    GPSTracker gpsTracker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +76,8 @@ public class EvaluacionTransaccionOnce  extends Activity {
         overridePendingTransition(R.anim.anim_slide_in_left,R.anim.anim_slide_out_left);
 
         db = new DatabaseHelper(getApplicationContext());
+
+        gpsTracker = new GPSTracker(MyActivity);
 
         pregunta = (TextView) findViewById(R.id.tvPregunta);
         guardar = (Button) findViewById(R.id.btGuardar);
@@ -87,6 +100,8 @@ public class EvaluacionTransaccionOnce  extends Activity {
         email_user = user.get(SessionManager.KEY_EMAIL);
         // id
         idUser = Integer.valueOf(user.get(SessionManager.KEY_ID_USER)) ;
+        user_id = Integer.valueOf(user.get(SessionManager.KEY_ID_USER)) ;
+
         params = new JSONObject();
         //Recogiendo paramentro del anterior Activity
         //Bundle bundle = savedInstanceState.getArguments();
@@ -95,17 +110,23 @@ public class EvaluacionTransaccionOnce  extends Activity {
         idPDV= bundle.getInt("idPDV");
         idRuta= bundle.getInt("idRuta");
         idAuditoria= bundle.getInt("idAuditoria");
-        try {
-            params.put("idPDV", idPDV);
-            //params.put("idRuta", idRuta);
-            params.put("idAuditoria", idAuditoria);
-            params.put("idCompany", idCompany);
-            params.put("idUser", idUser);
 
-            //params.put("id_pdv",idPDV);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        store_id = bundle.getInt("idPDV");
+        audit_id = bundle.getInt("idAuditoria");
+        road_id = bundle.getInt("idRuta");
+        poll_id = GlobalConstant.poll_id[20];
+
+//        try {
+//            params.put("idPDV", idPDV);
+//            //params.put("idRuta", idRuta);
+//            params.put("idAuditoria", idAuditoria);
+//            params.put("idCompany", idCompany);
+//            params.put("idUser", idUser);
+//
+//            //params.put("id_pdv",idPDV);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         // db.deleteAllEncuesta();
         //cargarPreguntasEncuesta(params);
         leerEncuesta();
@@ -169,31 +190,56 @@ public class EvaluacionTransaccionOnce  extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        JSONObject paramsData;
-                        paramsData = new JSONObject();
-                        try {
-                            paramsData.put("poll_id", pregunta.getTag());
-                            paramsData.put("user_id", String.valueOf(idUser));
-                            paramsData.put("store_id", idPDV);
-                            paramsData.put("idAuditoria", idAuditoria);
-                            paramsData.put("idCompany", idCompany);
-                            paramsData.put("idRuta", idRuta);
-                            paramsData.put("sino", "0");
-                            paramsData.put("options", "1");
-                            paramsData.put("limits", "0");
-                            paramsData.put("media", "0");
-                            paramsData.put("coment", "0");
-                            paramsData.put("coment_options", "1");
-                            paramsData.put("result", result);
-                            paramsData.put("status", "1");
-                            paramsData.put("opcion", pregunta.getTag().toString()+opciones.toString());
-                            paramsData.put("comentario", "");
-                            paramsData.put("comentario_options", comentario.getText());
-                            //params.put("id_pdv",idPDV);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        insertaEncuesta(paramsData);
+
+                        pollDetail = new PollDetail();
+                        pollDetail.setPoll_id(poll_id);
+                        pollDetail.setStore_id(store_id);
+                        pollDetail.setSino(0);
+                        pollDetail.setOptions(1);
+                        pollDetail.setLimits(0);
+                        pollDetail.setMedia(0);
+                        pollDetail.setComment(0);
+                        pollDetail.setResult(0);
+                        pollDetail.setLimite("");
+                        pollDetail.setComentario("");
+                        pollDetail.setAuditor(user_id);
+                        pollDetail.setProduct_id(0);
+                        pollDetail.setCategory_product_id(0);
+                        pollDetail.setPublicity_id(0);
+                        pollDetail.setCompany_id(GlobalConstant.company_id);
+                        pollDetail.setCommentOptions(1);
+                        pollDetail.setSelectdOptions("");
+                        pollDetail.setSelectedOtionsComment(comentario.getText().toString());
+                        pollDetail.setPriority("0");
+
+
+//                        JSONObject paramsData;
+//                        paramsData = new JSONObject();
+//                        try {
+//                            paramsData.put("poll_id", pregunta.getTag());
+//                            paramsData.put("user_id", String.valueOf(idUser));
+//                            paramsData.put("store_id", idPDV);
+//                            paramsData.put("idAuditoria", idAuditoria);
+//                            paramsData.put("idCompany", idCompany);
+//                            paramsData.put("idRuta", idRuta);
+//                            paramsData.put("sino", "0");
+//                            paramsData.put("options", "1");
+//                            paramsData.put("limits", "0");
+//                            paramsData.put("media", "0");
+//                            paramsData.put("coment", "0");
+//                            paramsData.put("coment_options", "1");
+//                            paramsData.put("result", result);
+//                            paramsData.put("status", "1");
+//                            paramsData.put("opcion", pregunta.getTag().toString()+opciones.toString());
+//                            paramsData.put("comentario", "");
+//                            paramsData.put("comentario_options", comentario.getText());
+//                            //params.put("id_pdv",idPDV);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                        insertaEncuesta(paramsData);
+
+                        new loadPoll().execute();
                         dialog.dismiss();
 
                     }
@@ -281,6 +327,56 @@ public class EvaluacionTransaccionOnce  extends Activity {
         );
 
         AppController.getInstance().addToRequestQueue(jsObjRequest);
+    }
+
+    class loadPoll extends AsyncTask<Void , Integer , Boolean> {
+        /**
+         * Antes de comenzar en el hilo determinado, Mostrar progresión
+         * */
+        boolean failure = false;
+        @Override
+        protected void onPreExecute() {
+            //tvCargando.setText("Cargando Product...");
+            pDialog.show();
+            super.onPreExecute();
+        }
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+
+            if(!AuditUtil.insertPollDetail(pollDetail)) return false;
+
+            String time_close = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").format(new Date());
+            mAudit = new Audit();
+            mAudit.setCompany_id(GlobalConstant.company_id);
+            mAudit.setStore_id(store_id);
+            mAudit.setId(audit_id);
+            mAudit.setRoute_id(road_id);
+            mAudit.setUser_id(user_id);
+            mAudit.setLatitude_close(String.valueOf(gpsTracker.getLatitude()));
+            mAudit.setLongitude_close(String.valueOf(gpsTracker.getLongitude()));
+            mAudit.setLatitude_open(String.valueOf(GlobalConstant.latitude_open));
+            mAudit.setLongitude_open(String.valueOf(GlobalConstant.longitude_open));
+            mAudit.setTime_open(GlobalConstant.inicio);
+            mAudit.setTime_close(time_close);
+
+            if(!AuditUtil.closeAuditRoadStore(mAudit)) return false;
+
+            return true;
+        }
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(Boolean result) {
+            // dismiss the dialog once product deleted
+
+            if (result){
+                finish();
+            } else {
+                Toast.makeText(MyActivity , R.string.saveError, Toast.LENGTH_LONG).show();
+            }
+            hidepDialog();
+        }
     }
 
     private void showpDialog() {
